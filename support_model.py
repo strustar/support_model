@@ -3,9 +3,29 @@ import numpy as np
 import pyvista as pv
 from stpyvista import stpyvista
 import hashlib
+import warnings
+import platform
+from pyvista.core.errors import PyVistaFutureWarning
+import os
 
 # --- 페이지 설정 ---
 st.set_page_config(page_title="동바리 구조 시각화", layout="wide")
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=PyVistaFutureWarning)
+
+# 환경별 설정
+if platform.system() == 'Linux':  # Streamlit Cloud 환경
+    os.environ["PYVISTA_OFF_SCREEN"] = "true"
+    os.environ["PYVISTA_USE_IPYVTK"] = "true"
+    os.environ["DISPLAY"] = ":99"
+    os.environ["MESA_GL_VERSION_OVERRIDE"] = "3.3"
+    pv.OFF_SCREEN = True
+    pv.start_xvfb()
+else:  # 로컬 Windows 환경
+    plotter = pv.Plotter(off_screen=True)
+    pv.OFF_SCREEN = False
+
+
 st.title("🏗️ 3D 동바리 구조 시각화 (PyVista)")
 st.write("간격 데이터를 누적해 중공 원형 단면 동바리 구조 생성함")
 
@@ -79,7 +99,7 @@ if valid:
     for x in x_pos:
         for y in y_pos:
             tube = pv.Tube(pointa=[x,y,0], pointb=[x,y,z_pos[-1]],
-                           radius=radius, capping=False)
+                           radius=radius)
             pl.add_mesh(tube, color=v_color, opacity=v_opac, smooth_shading=True)
     # 가로 부재 (X축)
     for z in z_pos:
@@ -87,7 +107,7 @@ if valid:
             for i in range(len(x_pos)-1):
                 tube = pv.Tube(pointa=[x_pos[i],y,z],
                                pointb=[x_pos[i+1],y,z],
-                               radius=radius*0.8, capping=False)
+                               radius=radius*0.8)
                 pl.add_mesh(tube, color=x_color, opacity=x_opac, smooth_shading=True)
     # 세로 부재 (Y축)
     for z in z_pos:
@@ -95,7 +115,7 @@ if valid:
             for i in range(len(y_pos)-1):
                 tube = pv.Tube(pointa=[x,y_pos[i],z],
                                pointb=[x,y_pos[i+1],z],
-                               radius=radius*0.8, capping=False)
+                               radius=radius*0.8)
                 pl.add_mesh(tube, color=y_color, opacity=y_opac, smooth_shading=True)
 
     # 카메라 뷰 선택
