@@ -1,9 +1,10 @@
-streamlit==1.37.1
+streamlit==1.45.0
 numpy==1.26.4
 pandas==2.2.2
 shapely==2.0.7
 stpyvista==0.1.4
 pyvista==0.44.2
-vtk==9.3.1
+vtk==9.3.0
 openpyxl==3.1.5
 panel==1.6.1
+
