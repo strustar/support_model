@@ -2,5 +2,5 @@ streamlit>=1.20.0,<2.0.0
 numpy>=1.25.0,<1.27.0
 pandas>=2.1.0,<2.3.0
 pyvista[all]>=0.40.0,<0.45.0
-
+stpyvista>=0.1.0
 
