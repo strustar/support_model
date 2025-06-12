@@ -5,4 +5,4 @@ libosmesa6
 libsm6
 libxext6
 libglib2.0-0
-xvfb               # off-screen 렌더 가속
+xvfb 
